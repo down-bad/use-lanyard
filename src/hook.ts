@@ -1,4 +1,4 @@
-import useSWR, {SWRConfiguration} from 'swr';
+import useSWR from 'swr';
 import {Data, LanyardResponse} from './types';
 
 export class LanyardError extends Error {
@@ -7,9 +7,7 @@ export class LanyardError extends Error {
 	}
 }
 
-export type Options = Omit<SWRConfiguration<Data, LanyardError>, 'fetcher'>;
-
-export function useLanyard(snowflake: string, options?: Options) {
+export function useLanyard(snowflake: string) {
 	return useSWR<Data, LanyardError>(
 		`lanyard:${snowflake}`,
 		async () => {
@@ -25,7 +23,7 @@ export function useLanyard(snowflake: string, options?: Options) {
 
 			return body.data;
 		},
-		options,
+		{refreshInterval: 10000},
 	);
 }
 
